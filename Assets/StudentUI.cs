@@ -30,4 +30,15 @@ public class StudentUI : Singleton<StudentUI>
             newWord.SetupWrongWord(word);
         }
     }
+
+    public void Clear()
+    {
+        studentName.text = "";
+        compleption.text = "";
+        score.text = "";
+        for (int i = 0; i < wrongWordsTransform.childCount; i++)
+        {
+            Destroy(wrongWordsTransform.transform.GetChild(i).gameObject);
+        }
+    }
 }

@@ -14,10 +14,12 @@ public class MainMenu : Singleton<MainMenu>
     public GameObject gameManager;
     public GameObject teacherPanel;
     public GameObject loginPanel;
+    public LeanButton quit;
     
     void Awake()
     {
         login.OnClick.AddListener(Login);
+        quit.OnClick.AddListener(Quit);
     }
 
     public void Login()
@@ -40,5 +42,10 @@ public class MainMenu : Singleton<MainMenu>
             FindObjectOfType<GameManager>().data.studentName = inputName.text;
             StartCoroutine(FindObjectOfType<GameManager>().Timer());
         }
+    }
+
+    private void Quit()
+    {
+        Application.Quit();
     }
 }

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 public class Upload : Singleton<Upload>
 {
+
 	NetworkCredential credential=new NetworkCredential("Xiaochang","MangoLiu2190");
 	public StudentNameButton studentNameButton;
 
@@ -177,7 +179,7 @@ public class Upload : Singleton<Upload>
 
 		{
 
-			if(files[i].Extension.Equals(".json"))   //判断是否为txt文件
+			if(files[i].Extension.Equals(".json"))   //判断是否为json文件
 
 			{
 
@@ -191,19 +193,34 @@ public class Upload : Singleton<Upload>
 					
 					var newData = ScriptableObject.CreateInstance<StudentData>();
 					JsonUtility.FromJsonOverwrite(file,newData);
-					studentManager.StudentsList.Add(new StudentData
+					/*studentManager.StudentsList.Add(new StudentData
 					{
 						score = newData.score, studentName = newData.studentName, completion = newData.completion,
 						WrongOptions = newData.WrongOptions
-					});
+					});*/
+					studentManager.StudentsList.Add(new StudentManager.StudentBasicInfo()
+						{data = newData, score = newData.score});
 				}
 
 			}
 
 		}
 		
-				
-		foreach (var student in studentManager.StudentsList)
+		
+	}
+
+	public void SetupStudentList()
+	{
+		for (int i = 0; i < studentManager.StudentsList.Count+studentManager.ArrangedStudentList.Count; i++)
+		{
+			var maxValue = studentManager.StudentsList.Max(t => t.score);
+			Debug.Log(maxValue);
+			Debug.Log(studentManager.StudentsList.FindIndex(max_num => max_num.score == maxValue));
+			studentManager.ArrangedStudentList.Add(studentManager.StudentsList[studentManager.StudentsList.FindIndex(max_num => max_num.score == maxValue)].data);
+			studentManager.StudentsList.RemoveAt(studentManager.StudentsList.FindIndex(max_num => max_num.score == maxValue));
+		}
+		
+		foreach (var student in studentManager.ArrangedStudentList)
 		{
 			var newStudent = Instantiate(studentNameButton, studentManager.content);
 			Debug.Log(student.studentName);

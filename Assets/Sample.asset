@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   studentName: 
   score: 0
-  completion: 0
+  completion: -1
   WrongOptions: []
